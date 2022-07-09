@@ -11,7 +11,7 @@ function updateCoffeeView(coffeeQty) {
 
 function clickCoffee(data) {
   // your code here
-  data.coffee += 1; //why data?is it because  the same has been used in the
+  data.coffee += 1;
   updateCoffeeView(data.coffee);
   renderProducers(data);
 }
@@ -26,9 +26,6 @@ function unlockProducers(producers, coffeeCount) {
     if (coffeeCount >= 0.5 * producers[i].price) {
       producers[i].unlocked = true;
     } else producers[i].unlocked;
-    // producers.forEach(producer => {
-    //   if (producer.price / 2 <= coffeeCount) producer.unlocked = true;
-    // });
   }
 }
 
@@ -139,16 +136,14 @@ function attemptToBuyProducer(data, producerId) {
 
 function buyButtonClick(event, data) {
   // your code here
-  let amount = getProducerById(data, event.target.id);
-  if (canAffordProducer) {
-    if (event.target.TagName === "BUTTON") {
+  let id = getProducerById(data, event.target.id);
+
+  if (event.target.TagName === "BUTTON") {
+    if (attemptToBuyProducer) {
       renderProducers(data);
-      data.coffee -= amount.price;
-      data.totalCPS += amount.cps;
-    }
-    // but.addEventListener("click",event)
-    //
-    else window.alert("Not enough coffee!");
+      updateCoffeeView(data.coffee);
+      updateCPSView(data.totalCPS);
+    } else window.alert("Not enough coffee!");
   }
 }
 
