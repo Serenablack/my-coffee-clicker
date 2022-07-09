@@ -11,7 +11,9 @@ function updateCoffeeView(coffeeQty) {
 
 function clickCoffee(data) {
   // your code here
-  data.coffee += 1;
+  setInterval(() => {
+    data.coffee += 1;
+  }, 1000);
   updateCoffeeView(data.coffee);
   renderProducers(data);
 }
@@ -136,10 +138,9 @@ function attemptToBuyProducer(data, producerId) {
 
 function buyButtonClick(event, data) {
   // your code here
-  let id = getProducerById(data, event.target.id);
-
-  if (event.target.TagName === "BUTTON") {
-    if (attemptToBuyProducer) {
+  if (event.target.tagName === "BUTTON") {
+    let id = event.target.id.split("buy_")[1];
+    if (attemptToBuyProducer(data, id)) {
       renderProducers(data);
       updateCoffeeView(data.coffee);
       updateCPSView(data.totalCPS);
@@ -153,6 +154,20 @@ function tick(data) {
   updateCoffeeView(data.coffee);
   renderProducers(data);
 }
+
+function windowStorage(data) {
+  if (data) {
+    localStorage.setItem("data", JSON.stringify(data));
+  }
+}
+//function to store data called
+setInterval(() => windowStorage(Data), 1000);
+getStored = () => {
+  let Data = localStorage.getItem("data");
+  if (Data) {
+    return JSON.parse(Data);
+  } else return window.data;
+};
 
 /*************************
  *  Start your engines!
@@ -171,7 +186,7 @@ function tick(data) {
 if (typeof process === "undefined") {
   // Get starting data from the window object
   // (This comes from data.js)
-  const data = window.data;
+  const data = getStored();
 
   // Add an event listener to the giant coffee emoji
   const bigCoffee = document.getElementById("big_coffee");
